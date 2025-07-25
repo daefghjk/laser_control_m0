@@ -1,0 +1,73 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Project (make all)",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "all"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "在 build 目录中编译整个项目 (执行 make all)"
+        },
+        {
+            "label": "Generate SysConfig Files (make syscfg)",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "syscfg"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "problemMatcher": [],
+            "detail": "在 build 目录中生成 SysConfig 配置文件 (执行 make syscfg)"
+        },
+        {
+            "label": "Open SysConfig GUI (make syscfg-gui)",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "syscfg-gui"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "problemMatcher": [],
+            "detail": "在 build 目录中打开 SysConfig 图形界面 (执行 make syscfg-gui)"
+        },
+        {
+            "label": "Flash MSPM0 with OpenOCD",
+            "type": "shell",
+            "command": "C:/Users/Luck_One/AppData/Local/Texas Instruments/ti-embedded-debug/openocd/20250414/bin/openocd.exe",
+            "args": [
+                "-s", "C:/Users/Luck_One/AppData/Local/Texas Instruments/ti-embedded-debug/openocd/20250414/share/openocd/scripts",
+                "-f", "interface/cmsis-dap.cfg",
+                "-f", "target/ti_mspm0.cfg",
+                "-c", "adapter speed 6000",
+                "-c", "init",
+                "-c", "reset",
+                "-c", "program D:/project/laser_control_m0/laser_control_red/m0/build/laser_control_red.out reset exit"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "detail": "使用openocd将编译后的程序通过DAP-Link烧录到MSPM0微控制器中 (执行 openocd 命令)"
+        }
+    ]
+}

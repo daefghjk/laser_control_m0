@@ -1,0 +1,42 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug MSPM0 with TI Embedded Debug",
+            "type": "cortex-debug",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/build",
+            "executable": "laser_control_red.out",
+            "servertype": "openocd",
+            "runToEntryPoint": "main",
+            "device": "MSPM0G3507",
+            "configFiles": [
+                "./interface/cmsis-dap.cfg",
+                "./target/ti_mspm0.cfg"
+            ],
+            "searchDir": [
+                "C:/Users/Luck_One/AppData/Local/Texas Instruments/ti-embedded-debug/openocd/20250414/share/openocd/scripts"
+            ],
+            "loadFiles": [
+                "${workspaceFolder}/build/laser_control_red.out"
+            ],
+            "openOCDLaunchCommands": [
+                "adapter speed 6000"
+            ]
+        }
+    ],
+    "env": {
+        "LC_ALL": "C"
+    },
+    "hardwareBreakpoints": 2,
+    "setupCommands": [
+    {
+        "text": "set host-charset UTF-8"
+    },
+    {
+        "text": "set target-charset UTF-8"
+    }
+    ]
+
+
+}
