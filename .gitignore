@@ -62,4 +62,5 @@ tasks.json
 launch.json
 *.cmd.genlibs
 device.opt
+Event.dot
 imports.mak
