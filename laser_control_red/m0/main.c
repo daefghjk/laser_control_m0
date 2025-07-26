@@ -1,9 +1,11 @@
-#include "ti_msp_dl_config.h"
+#include "BOARD.h"
 
 int main(void)
 {
-    SYSCFG_DL_init();
+    BOARD_Init();
 
-    while (1) {
+    while (1)
+    {
+        
     }
 }
