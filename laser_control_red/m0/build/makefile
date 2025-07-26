@@ -18,6 +18,9 @@ NAME = laser_control_red
 USER_SRC_DIRS = ../modules/src \
                 ../system/src
 
+USER_INC_DIRS = ../modules/inc \
+                ../system/inc
+
 USER_SRCS := $(foreach dir,$(USER_SRC_DIRS),$(wildcard $(dir)/*.c))
 USER_OBJS := $(patsubst %.c,%.obj,$(notdir $(USER_SRCS)))
 OBJECTS += $(USER_OBJS)
@@ -35,7 +38,8 @@ CFLAGS += -I.. \
     -mfloat-abi=soft \
     -mthumb
 
-CFLAGS += $(foreach dir,$(USER_SRC_DIRS),-I$(dir))
+CFLAGS += $(foreach dir,$(USER_SRC_DIRS),-I$(dir)) \
+        $(foreach dir,$(USER_INC_DIRS),-I$(dir))
 
 LFLAGS += -ldevice.cmd.genlibs \
     "-L$(MSPM0_SDK_INSTALL_DIR)/source" \
@@ -77,18 +81,30 @@ endef
 
 $(foreach c_file,$(SYSCFG_C_FILES),$(eval $(call C_RULE,$(c_file))))
 
+USER_H_FILES := $(foreach dir,$(USER_INC_DIRS),$(wildcard $(dir)/*.h))
+
 define USER_C_RULE
-$(notdir $(basename $(1))).obj: $(1) $(SYSCFG_H_FILES)
+$(notdir $(basename $(1))).obj: $(1) $(SYSCFG_H_FILES) $(USER_H_FILES)
 	@ echo Building $$@
 	@ $(CC) $(CFLAGS) -c $$< -o $$@
 endef
 
 $(foreach src,$(USER_SRCS),$(eval $(call USER_C_RULE,$(src))))
 
-main.obj: ../main.c $(SYSCFG_H_FILES)
+main.obj: ../main.c $(SYSCFG_H_FILES) $(USER_H_FILES)
 	@ echo Building $@
 	@ $(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME).out: $(OBJECTS)
 	@ echo linking $@
 	@ $(LNK) -Wl,-u,_c_int00 $(OBJECTS)  $(LFLAGS) -o $(NAME).out
+
+clean:
+	@ echo Cleaning build files...
+	@ rm -f *.obj *.out *.map
+	@ rm -f $(SYSCFG_FILES)
+
+$(foreach dir,$(USER_SRC_DIRS),$(if $(wildcard $(dir)),,$(warning Directory $(dir) does not exist)))
+$(foreach dir,$(USER_INC_DIRS),$(if $(wildcard $(dir)),,$(warning Directory $(dir) does not exist)))
+
+.PHONY: all syscfg syscfg-gui clean

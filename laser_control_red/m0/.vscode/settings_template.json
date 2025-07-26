@@ -1,7 +1,7 @@
 {
     "clangd.arguments": [
         "--query-driver=D:/Software/ti/ccs2020/ccs/tools/compiler/ti-cgt-armllvm_4.0.3.LTS/bin/tiarmclang*",
-        "--compile-commands-dir=${workspaceFolder}"
+        "--compile-commands-dir=${workspaceFolder}/build"
     ],
     "clangd.checkUpdates": true,
     "clangd.onConfigChanged": "restart"
