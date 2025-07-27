@@ -2,6 +2,8 @@
 #include "JOYSTICK.h"
 #include "OLED.h"
 #include "BOARD.h"
+#include "PWM.h"
+#include "STEPPER.h"
 
 JOYSTICK_HANDLE_T joystick_handle;
 
