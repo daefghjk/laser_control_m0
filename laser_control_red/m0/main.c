@@ -1,8 +1,4 @@
-
-// #include <stdint.h>
-#include "ti_msp_dl_config.h"
 #include "BOARD.h"
-#include "PWM.h"
 #include "OLED.h"
 
 int main(void)
@@ -11,6 +7,7 @@ int main(void)
     // PWM_SetFre(STEPPER_MOTOR_INST, GPIO_STEPPER_MOTOR_C0_IDX, 1000);
     // PWM_SetDuty(STEPPER_MOTOR_INST, GPIO_STEPPER_MOTOR_C0_IDX, 50);
     // PWM_Start(STEPPER_MOTOR_INST);
+    OLED_ShowString(&oled_handle, 1, 1, "Hello, World!");
 
     while (1)
     {

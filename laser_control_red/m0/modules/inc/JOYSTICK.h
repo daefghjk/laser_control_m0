@@ -1,7 +1,7 @@
 #ifndef __JOYSTICK_H__
 #define __JOYSTICK_H__
 
-#include <ti/devices/msp/msp.h>
+#include <stdint.h>
 
 typedef enum {
     JOYSTICK_DIRECTION_NONE = 0,
@@ -12,8 +12,8 @@ typedef enum {
 } JOYSTICK_DIRECTION_T;
 
 typedef struct {
-    ADC12_Regs * joystick_ADC_INST;
-    IRQn_Type joystick_ADC_IRQN;
+    void * joystick_ADC_INST;
+    int joystick_ADC_IRQN;
     int joystick_DMA_channel_id;
     
     float joystick_min_Rel_voltage; // 认为有移动的相对中值的最小电压
@@ -23,8 +23,8 @@ typedef struct {
 } JOYSTICK_CONFIG_T;
 
 typedef struct {
-    ADC12_Regs * joystick_ADC_INST;
-    IRQn_Type joystick_ADC_IRQN;
+    void * joystick_ADC_INST;
+    int joystick_ADC_IRQN;
     int joystick_DMA_channel_id;
     
     float joystick_min_Rel_voltage; // 认为有移动的相对中值的最小电压
@@ -50,5 +50,15 @@ void JOYSTICK_startConversion(JOYSTICK_HANDLE_T *handle);
 void JOYSTICK_stopConversion(JOYSTICK_HANDLE_T *handle);
 void JOYSTICK_clearSamples(JOYSTICK_HANDLE_T *handle);
 void JOYSTICK_CommonIRQHandler(JOYSTICK_HANDLE_T *handle);
+
+#define JOYSTICK_DEFAULT_CONFIG(adc_instance, adc_irqn, dma_channel_id, min_Rel_voltage) { \
+    .joystick_ADC_INST = adc_instance, \
+    .joystick_ADC_IRQN = adc_irqn, \
+    .joystick_DMA_channel_id = dma_channel_id, \
+    .joystick_min_Rel_voltage = min_Rel_voltage, \
+    .joystick_max_voltage = 3.3f, \
+    .joystick_x_is_inverted = 0, \
+    .joystick_y_is_inverted = 0 \
+}
 
 #endif /* __JOYSTICK_H__ */

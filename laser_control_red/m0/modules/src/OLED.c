@@ -19,9 +19,8 @@
  */
 static int OLED_WriteCommand(OLED_Handle_t* handle, uint8_t Command)
 {
-    if (handle == NULL || !handle->initialized) {
+    if (handle == NULL)
         return OLED_ERROR_PARAM;
-    }
     
     uint8_t buffer[2] = {0x00, Command};
     DL_I2C_fillControllerTXFIFO(handle->config.i2c_inst, buffer, 2);
@@ -41,9 +40,8 @@ static int OLED_WriteCommand(OLED_Handle_t* handle, uint8_t Command)
  */
 static int OLED_WriteData(OLED_Handle_t* handle, uint8_t Data)
 {
-    if (handle == NULL || !handle->initialized) {
+    if (handle == NULL)
         return OLED_ERROR_PARAM;
-    }
     
     uint8_t buffer[2] = { 0x40, Data};
     DL_I2C_fillControllerTXFIFO(handle->config.i2c_inst, buffer, 2);
@@ -64,9 +62,7 @@ static int OLED_WriteData(OLED_Handle_t* handle, uint8_t Data)
  */
 static int OLED_SetCursor(OLED_Handle_t* handle, uint8_t Y, uint8_t X)
 {
-    if (handle == NULL || !handle->initialized) {
-        return OLED_ERROR_PARAM;
-    }
+    CHECK_HANDLE(handle);
     
     OLED_WriteCommand(handle, 0xB0 | Y);					//设置Y位置
     OLED_WriteCommand(handle, 0x10 | ((X & 0xF0) >> 4));	//设置X位置高4位
@@ -307,7 +303,6 @@ int OLED_Init(OLED_Handle_t* handle, const OLED_Config_t* config)
         return OLED_ERROR_PARAM;
     }
     
-    // 复制配置到句柄
     handle->config = *config;
     handle->initialized = 0;
     

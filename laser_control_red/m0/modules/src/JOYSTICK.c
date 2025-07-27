@@ -23,25 +23,25 @@ void JOYSTICK_Init(JOYSTICK_HANDLE_T *handle, const JOYSTICK_CONFIG_T *config)
     JOYSTICK_clearSamples(handle);
 
     DL_DMA_setSrcAddr(DMA, handle->joystick_DMA_channel_id,
-        (uint32_t) DL_ADC12_getFIFOAddress(handle->joystick_ADC_INST));
+        (uint32_t) DL_ADC12_getFIFOAddress((ADC12_Regs *)handle->joystick_ADC_INST));
     DL_DMA_setDestAddr(DMA, handle->joystick_DMA_channel_id, (uint32_t) handle->joystick_ADCsamples);
     DL_DMA_enableChannel(DMA, handle->joystick_DMA_channel_id);
 
-    NVIC_ClearPendingIRQ(handle->joystick_ADC_IRQN);
-    NVIC_EnableIRQ(handle->joystick_ADC_IRQN);
+    NVIC_ClearPendingIRQ((IRQn_Type)handle->joystick_ADC_IRQN);
+    NVIC_EnableIRQ((IRQn_Type)handle->joystick_ADC_IRQN);
 }
 
 void JOYSTICK_startConversion(JOYSTICK_HANDLE_T *handle)
 {
     JOYSTICK_clearSamples(handle);
-    DL_ADC12_clearInterruptStatus(handle->joystick_ADC_INST, DL_ADC12_INTERRUPT_DMA_DONE);
-    DL_ADC12_enableConversions(handle->joystick_ADC_INST);
-    DL_ADC12_startConversion(handle->joystick_ADC_INST);
+    DL_ADC12_clearInterruptStatus((ADC12_Regs *)handle->joystick_ADC_INST, DL_ADC12_INTERRUPT_DMA_DONE);
+    DL_ADC12_enableConversions((ADC12_Regs *)handle->joystick_ADC_INST);
+    DL_ADC12_startConversion((ADC12_Regs *)handle->joystick_ADC_INST);
 }
 
 void JOYSTICK_stopConversion(JOYSTICK_HANDLE_T *handle)
 {
-    DL_ADC12_stopConversion(handle->joystick_ADC_INST);
+    DL_ADC12_stopConversion((ADC12_Regs *)handle->joystick_ADC_INST);
     JOYSTICK_clearSamples(handle);
 }
 
@@ -136,7 +136,7 @@ void JOYSTICK_SpeedCalculation(JOYSTICK_HANDLE_T *handle)
 
 void JOYSTICK_CommonIRQHandler(JOYSTICK_HANDLE_T *handle)
 {
-    switch (DL_ADC12_getPendingInterrupt(handle->joystick_ADC_INST))
+    switch (DL_ADC12_getPendingInterrupt((ADC12_Regs *)handle->joystick_ADC_INST))
     {
         case DL_ADC12_IIDX_DMA_DONE:
         {
@@ -152,7 +152,7 @@ void JOYSTICK_CommonIRQHandler(JOYSTICK_HANDLE_T *handle)
 
             JOYSTICK_SpeedCalculation(handle);
 
-            DL_ADC12_clearInterruptStatus(handle->joystick_ADC_INST, DL_ADC12_INTERRUPT_DMA_DONE);
+            DL_ADC12_clearInterruptStatus((ADC12_Regs *)handle->joystick_ADC_INST, DL_ADC12_INTERRUPT_DMA_DONE);
             break;
         }
         default:

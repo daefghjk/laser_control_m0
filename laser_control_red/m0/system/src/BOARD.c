@@ -2,8 +2,6 @@
 #include "JOYSTICK.h"
 #include "OLED.h"
 #include "BOARD.h"
-#include "PWM.h"
-#include "STEPPER.h"
 
 JOYSTICK_HANDLE_T joystick_handle;
 OLED_Handle_t oled_handle;
@@ -15,15 +13,12 @@ void BOARD_Init(void)
     OLED_Config_t oled_config = OLED_DEFAULT_CONFIG(OLED_INST);
     OLED_Init(&oled_handle, &oled_config);
 
-    JOYSTICK_CONFIG_T joystick_config = {
-        .joystick_ADC_INST = ADC12_JOYSTICK_INST,
-        .joystick_ADC_IRQN = ADC12_JOYSTICK_INST_INT_IRQN,
-        .joystick_DMA_channel_id = DMA_CH_ADC_JOYSTICK_CHAN_ID,
-        .joystick_min_Rel_voltage = 0.5f, // 认为有移动的相对中值的最小电压
-        .joystick_max_voltage = 3.3f, // 最大电压
-        .joystick_x_is_inverted = 0, // 是否反向
-        .joystick_y_is_inverted = 0, // 是否反向
-    };
+    JOYSTICK_CONFIG_T joystick_config = JOYSTICK_DEFAULT_CONFIG(
+        ADC12_JOYSTICK_INST, 
+        ADC12_JOYSTICK_INST_INT_IRQN, 
+        DMA_CH_ADC_JOYSTICK_CHAN_ID, 
+        0.3f
+    );
     JOYSTICK_Init(&joystick_handle, &joystick_config);
    
 }
