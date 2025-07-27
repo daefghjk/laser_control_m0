@@ -1,29 +1,27 @@
-#include "ti_msp_dl_config.h"
+#include <ti/driverlib/driverlib.h>
 #include "JOYSTICK.h"
 
-JOYSTICK_HANDLE_T joystick_handle = {
-    .joystick_ADC_INST = ADC12_JOYSTICK_INST,
-    .joystick_ADC_IRQN = ADC12_JOYSTICK_INST_INT_IRQN,
-    .joystick_DMA_channel_id = DMA_CH_ADC_JOYSTICK_CHAN_ID,
-
-    .joystick_min_Rel_voltage = 0.5f, // 认为有移动的相对中值的最小电压
-    .joystick_max_voltage = 3.3f, // 最大电压
-
-    .joystick_ADCsamples = {0},
-    .joystick_x_ADC_value = 0,
-    .joystick_y_ADC_value = 0,
-
-    .joystick_x_voltage = 0.0f,
-    .joystick_y_voltage = 0.0f,
-
-    .joystick_x_direction = JOYSTICK_DIRECTION_NONE,
-    .joystick_y_direction = JOYSTICK_DIRECTION_NONE,
-    .joystick_x_speed = 0,
-    .joystick_y_speed = 0,
-};
-
-void JOYSTICK_Init(JOYSTICK_HANDLE_T *handle)
+void JOYSTICK_Init(JOYSTICK_HANDLE_T *handle, JOYSTICK_CONFIG_T *config)
 {
+    if (handle == NULL || config == NULL) {
+        return; // 错误处理
+    }
+
+    handle->joystick_ADC_INST = config->joystick_ADC_INST;
+    handle->joystick_ADC_IRQN = config->joystick_ADC_IRQN;
+    handle->joystick_DMA_channel_id = config->joystick_DMA_channel_id;
+
+    handle->joystick_min_Rel_voltage = config->joystick_min_Rel_voltage;
+    handle->joystick_max_voltage = config->joystick_max_voltage;
+    handle->joystick_x_is_inverted = config->joystick_x_is_inverted;
+    handle->joystick_y_is_inverted = config->joystick_y_is_inverted;
+
+    handle->joystick_x_direction = JOYSTICK_DIRECTION_NONE;
+    handle->joystick_y_direction = JOYSTICK_DIRECTION_NONE;
+    handle->joystick_x_speed = 0;
+    handle->joystick_y_speed = 0;
+    JOYSTICK_clearSamples(handle);
+
     DL_DMA_setSrcAddr(DMA, handle->joystick_DMA_channel_id,
         (uint32_t) DL_ADC12_getFIFOAddress(handle->joystick_ADC_INST));
     DL_DMA_setDestAddr(DMA, handle->joystick_DMA_channel_id, (uint32_t) handle->joystick_ADCsamples);
@@ -136,24 +134,25 @@ void JOYSTICK_SpeedCalculation(JOYSTICK_HANDLE_T *handle)
     }
 }
 
-void ADC12_JOYSTICK_INST_IRQHandler(void)
+void JOYSTICK_CommonIRQHandler(JOYSTICK_HANDLE_T *handle)
 {
-    switch (DL_ADC12_getPendingInterrupt(joystick_handle.joystick_ADC_INST)) {
+    switch (DL_ADC12_getPendingInterrupt(handle->joystick_ADC_INST))
+    {
         case DL_ADC12_IIDX_DMA_DONE:
         {
             uint32_t x_ADC_value_sum = 0, y_ADC_value_sum = 0;
             for (uint8_t i = 0; i < 6; i++) {
-                x_ADC_value_sum += joystick_handle.joystick_ADCsamples[i * 2];   // X values are in even indices
-                y_ADC_value_sum += joystick_handle.joystick_ADCsamples[i * 2 + 1]; // Y values are in odd indices
+                x_ADC_value_sum += handle->joystick_ADCsamples[i * 2];   // X values are in even indices
+                y_ADC_value_sum += handle->joystick_ADCsamples[i * 2 + 1]; // Y values are in odd indices
             }
-            joystick_handle.joystick_x_ADC_value = x_ADC_value_sum / 6;
-            joystick_handle.joystick_y_ADC_value = y_ADC_value_sum / 6;
-            joystick_handle.joystick_x_voltage = (joystick_handle.joystick_x_ADC_value / 4095.0f) * joystick_handle.joystick_max_voltage;
-            joystick_handle.joystick_y_voltage = (joystick_handle.joystick_y_ADC_value / 4095.0f) * joystick_handle.joystick_max_voltage;
+            handle->joystick_x_ADC_value = x_ADC_value_sum / 6;
+            handle->joystick_y_ADC_value = y_ADC_value_sum / 6;
+            handle->joystick_x_voltage = (handle->joystick_x_ADC_value / 4095.0f) * handle->joystick_max_voltage;
+            handle->joystick_y_voltage = (handle->joystick_y_ADC_value / 4095.0f) * handle->joystick_max_voltage;
 
-            JOYSTICK_SpeedCalculation(&joystick_handle);
+            JOYSTICK_SpeedCalculation(handle);
 
-            DL_ADC12_clearInterruptStatus(joystick_handle.joystick_ADC_INST, DL_ADC12_INTERRUPT_DMA_DONE);
+            DL_ADC12_clearInterruptStatus(handle->joystick_ADC_INST, DL_ADC12_INTERRUPT_DMA_DONE);
             break;
         }
         default:
