@@ -1,7 +1,7 @@
 #include <ti/driverlib/driverlib.h>
 #include "JOYSTICK.h"
 
-void JOYSTICK_Init(JOYSTICK_HANDLE_T *handle, JOYSTICK_CONFIG_T *config)
+void JOYSTICK_Init(JOYSTICK_HANDLE_T *handle, const JOYSTICK_CONFIG_T *config)
 {
     if (handle == NULL || config == NULL) {
         return; // 错误处理

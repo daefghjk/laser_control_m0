@@ -45,7 +45,7 @@ typedef struct {
     uint8_t joystick_y_speed;//0-100
 } JOYSTICK_HANDLE_T;
 
-void JOYSTICK_Init(JOYSTICK_HANDLE_T *handle, JOYSTICK_CONFIG_T *config);
+void JOYSTICK_Init(JOYSTICK_HANDLE_T *handle, const JOYSTICK_CONFIG_T *config);
 void JOYSTICK_startConversion(JOYSTICK_HANDLE_T *handle);
 void JOYSTICK_stopConversion(JOYSTICK_HANDLE_T *handle);
 void JOYSTICK_clearSamples(JOYSTICK_HANDLE_T *handle);

@@ -6,11 +6,14 @@
 #include "STEPPER.h"
 
 JOYSTICK_HANDLE_T joystick_handle;
+OLED_Handle_t oled_handle;
 
 void BOARD_Init(void)
 {
     SYSCFG_DL_init();
-    OLED_Init();
+    
+    OLED_Config_t oled_config = OLED_DEFAULT_CONFIG(OLED_INST);
+    OLED_Init(&oled_handle, &oled_config);
 
     JOYSTICK_CONFIG_T joystick_config = {
         .joystick_ADC_INST = ADC12_JOYSTICK_INST,
