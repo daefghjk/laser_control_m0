@@ -126,6 +126,7 @@ I2C2.sclPinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric11";
 PWM1.$name                              = "STEPPER_MOTOR";
 PWM1.pwmMode                            = "EDGE_ALIGN_UP";
 PWM1.interrupts                         = ["LOAD_EVENT"];
+PWM1.clockPrescale                      = 100;
 PWM1.peripheral.$assign                 = "TIMA0";
 PWM1.peripheral.ccp0Pin.$assign         = "PA21";
 PWM1.peripheral.ccp1Pin.$assign         = "PA22";

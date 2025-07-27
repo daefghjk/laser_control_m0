@@ -298,12 +298,12 @@ SYSCONFIG_WEAK void SYSCFG_DL_SYSCTL_CLK_init(void) {
 /*
  * Timer clock configuration to be sourced by  / 1 (40000000 Hz)
  * timerClkFreq = (timerClkSrc / (timerClkDivRatio * (timerClkPrescale + 1)))
- *   40000000 Hz = 40000000 Hz / (1 * (0 + 1))
+ *   400000 Hz = 40000000 Hz / (1 * (99 + 1))
  */
 static const DL_TimerA_ClockConfig gSTEPPER_MOTORClockConfig = {
     .clockSel = DL_TIMER_CLOCK_BUSCLK,
     .divideRatio = DL_TIMER_CLOCK_DIVIDE_1,
-    .prescale = 0U
+    .prescale = 99U
 };
 
 static const DL_TimerA_PWMConfig gSTEPPER_MOTORConfig = {

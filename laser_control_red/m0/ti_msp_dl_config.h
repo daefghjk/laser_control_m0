@@ -91,7 +91,7 @@ extern "C" {
 #define STEPPER_MOTOR_INST                                                 TIMA0
 #define STEPPER_MOTOR_INST_IRQHandler                           TIMA0_IRQHandler
 #define STEPPER_MOTOR_INST_INT_IRQN                             (TIMA0_INT_IRQn)
-#define STEPPER_MOTOR_INST_CLK_FREQ                                     40000000
+#define STEPPER_MOTOR_INST_CLK_FREQ                                       400000
 /* GPIO defines for channel 0 */
 #define GPIO_STEPPER_MOTOR_C0_PORT                                         GPIOA
 #define GPIO_STEPPER_MOTOR_C0_PIN                                 DL_GPIO_PIN_21

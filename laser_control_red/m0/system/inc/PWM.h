@@ -5,6 +5,7 @@
 
 //初始化
 void PWM_Init(void);
+void Set_Freq_Duty(float_t freq, float_t duty, GPTIMER_Regs * Timer, DL_TIMER_CC_INDEX Channel);
 //设置频率
 void PWM_SetFre(GPTIMER_Regs *gpt, DL_TIMER_CC_INDEX ccIndex, uint32_t frequency_hz);
 //设置占空比
