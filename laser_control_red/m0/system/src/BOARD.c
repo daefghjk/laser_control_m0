@@ -2,6 +2,8 @@
 #include "JOYSTICK.h"
 #include "OLED.h"
 #include "BOARD.h"
+#include "PWM.h"
+#include "STEPPER.h"
 
 void BOARD_Init(void)
 {

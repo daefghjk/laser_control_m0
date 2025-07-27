@@ -64,3 +64,4 @@ launch.json
 device.opt
 Event.dot
 imports.mak
+c_cpp_properties.json
