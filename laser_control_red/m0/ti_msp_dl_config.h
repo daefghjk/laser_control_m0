@@ -87,23 +87,17 @@ extern "C" {
 
 
 
-/* Defines for STEPPER_MOTOR */
-#define STEPPER_MOTOR_INST                                                 TIMA0
-#define STEPPER_MOTOR_INST_IRQHandler                           TIMA0_IRQHandler
-#define STEPPER_MOTOR_INST_INT_IRQN                             (TIMA0_INT_IRQn)
-#define STEPPER_MOTOR_INST_CLK_FREQ                                       400000
+/* Defines for STEPPER_1 */
+#define STEPPER_1_INST                                                     TIMA0
+#define STEPPER_1_INST_IRQHandler                               TIMA0_IRQHandler
+#define STEPPER_1_INST_INT_IRQN                                 (TIMA0_INT_IRQn)
+#define STEPPER_1_INST_CLK_FREQ                                           400000
 /* GPIO defines for channel 0 */
-#define GPIO_STEPPER_MOTOR_C0_PORT                                         GPIOA
-#define GPIO_STEPPER_MOTOR_C0_PIN                                 DL_GPIO_PIN_21
-#define GPIO_STEPPER_MOTOR_C0_IOMUX                              (IOMUX_PINCM46)
-#define GPIO_STEPPER_MOTOR_C0_IOMUX_FUNC             IOMUX_PINCM46_PF_TIMA0_CCP0
-#define GPIO_STEPPER_MOTOR_C0_IDX                            DL_TIMER_CC_0_INDEX
-/* GPIO defines for channel 1 */
-#define GPIO_STEPPER_MOTOR_C1_PORT                                         GPIOA
-#define GPIO_STEPPER_MOTOR_C1_PIN                                 DL_GPIO_PIN_22
-#define GPIO_STEPPER_MOTOR_C1_IOMUX                              (IOMUX_PINCM47)
-#define GPIO_STEPPER_MOTOR_C1_IOMUX_FUNC             IOMUX_PINCM47_PF_TIMA0_CCP1
-#define GPIO_STEPPER_MOTOR_C1_IDX                            DL_TIMER_CC_1_INDEX
+#define GPIO_STEPPER_1_C0_PORT                                             GPIOA
+#define GPIO_STEPPER_1_C0_PIN                                     DL_GPIO_PIN_21
+#define GPIO_STEPPER_1_C0_IOMUX                                  (IOMUX_PINCM46)
+#define GPIO_STEPPER_1_C0_IOMUX_FUNC                 IOMUX_PINCM46_PF_TIMA0_CCP0
+#define GPIO_STEPPER_1_C0_IDX                                DL_TIMER_CC_0_INDEX
 
 /* Defines for PWM_1 */
 #define PWM_1_INST                                                         TIMA1
@@ -140,6 +134,18 @@ extern "C" {
 #define GPIO_PWM_2_C1_IOMUX                                      (IOMUX_PINCM28)
 #define GPIO_PWM_2_C1_IOMUX_FUNC                     IOMUX_PINCM28_PF_TIMG0_CCP1
 #define GPIO_PWM_2_C1_IDX                                    DL_TIMER_CC_1_INDEX
+
+/* Defines for STEPPER_2 */
+#define STEPPER_2_INST                                                     TIMG6
+#define STEPPER_2_INST_IRQHandler                               TIMG6_IRQHandler
+#define STEPPER_2_INST_INT_IRQN                                 (TIMG6_INT_IRQn)
+#define STEPPER_2_INST_CLK_FREQ                                           400000
+/* GPIO defines for channel 1 */
+#define GPIO_STEPPER_2_C1_PORT                                             GPIOA
+#define GPIO_STEPPER_2_C1_PIN                                     DL_GPIO_PIN_22
+#define GPIO_STEPPER_2_C1_IOMUX                                  (IOMUX_PINCM47)
+#define GPIO_STEPPER_2_C1_IOMUX_FUNC                 IOMUX_PINCM47_PF_TIMG6_CCP1
+#define GPIO_STEPPER_2_C1_IDX                                DL_TIMER_CC_1_INDEX
 
 
 
@@ -353,9 +359,10 @@ void SYSCFG_DL_initPower(void);
 void SYSCFG_DL_GPIO_init(void);
 void SYSCFG_DL_SYSCTL_init(void);
 void SYSCFG_DL_SYSCTL_CLK_init(void);
-void SYSCFG_DL_STEPPER_MOTOR_init(void);
+void SYSCFG_DL_STEPPER_1_init(void);
 void SYSCFG_DL_PWM_1_init(void);
 void SYSCFG_DL_PWM_2_init(void);
+void SYSCFG_DL_STEPPER_2_init(void);
 void SYSCFG_DL_OLED_init(void);
 void SYSCFG_DL_I2C_1_init(void);
 void SYSCFG_DL_K230_init(void);

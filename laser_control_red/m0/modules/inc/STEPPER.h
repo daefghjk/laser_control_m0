@@ -7,9 +7,9 @@ typedef struct {
     GPTIMER_Regs *pwm_tim;      // PWM定时器句柄
     DL_TIMER_CC_INDEX pwm_channel;    // PWM通道
     GPIO_Regs *dir_port;        // 方向GPIO端口
-    uint16_t dir_pin;           // 方向引脚
+    uint32_t dir_pin;           // 方向引脚
     GPIO_Regs *en_port;         // 使能GPIO端口
-    uint16_t en_pin;            // 使能引脚
+    uint32_t en_pin;            // 使能引脚
     
     // 电机参数
     float step_angle;           // 每步进角度(度)
@@ -18,8 +18,7 @@ typedef struct {
 } STEPPER_CONFIG_T;
 
 typedef struct {
-    // 基本信息
-    // uint8_t num;                // 电机编号
+    // 配置信息
     STEPPER_CONFIG_T config;
 
     // 运行状态
@@ -50,5 +49,6 @@ void STEPPER_SetSpeed(STEPPER_HANDLE_T *handle, float speed_hz);
 void STEPPER_MoveSteps(STEPPER_HANDLE_T *handle, int32_t steps);
 void STEPPER_MoveAngle(STEPPER_HANDLE_T *handle, float angle_deg);
 void STEPPER_TimerCallback(STEPPER_HANDLE_T *handle);
+void STEPPER_CommonIRQHandler(STEPPER_HANDLE_T *handle);
 
 #endif

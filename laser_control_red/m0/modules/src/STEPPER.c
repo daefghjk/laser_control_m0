@@ -17,6 +17,7 @@ static void set_pwm_freq(STEPPER_HANDLE_T *handle, float freq)
 
     // 设置频率
     PWM_SetFre(handle->config.pwm_tim, handle->config.pwm_channel, (uint32_t)freq);
+    PWM_SetDuty(handle->config.pwm_tim, handle->config.pwm_channel, 50);
     handle->current_freq = freq;
 }
 static void update_hardware_state(STEPPER_HANDLE_T *handle)
@@ -68,7 +69,7 @@ void STEPPER_Init(STEPPER_HANDLE_T *handle, const STEPPER_CONFIG_T *config)
     handle->state.locked = 0;
     handle->state.moving = 0;
     handle->state.direction = 0;
-    handle->current_freq = 0.0f;
+    handle->current_freq = 100.0f;
     handle->target_steps = 0;
 
     // 初始化PWM
@@ -195,3 +196,18 @@ void STEPPER_TimerCallback(STEPPER_HANDLE_T *handle)
     }
 }
 
+void STEPPER_CommonIRQHandler(STEPPER_HANDLE_T *handle)
+{
+    if (handle == NULL) {
+        return;
+    }
+    
+    switch (DL_Timer_getPendingInterrupt(handle->config.pwm_tim)) {
+        case DL_TIMER_IIDX_LOAD:
+        STEPPER_TimerCallback(handle);
+            break;
+        default:
+            break;
+    }
+
+}

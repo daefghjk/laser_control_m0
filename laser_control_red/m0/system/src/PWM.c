@@ -5,16 +5,9 @@
 #include "PWM.h"
 
 //初始化
-void PWM_Init(void);
-void Set_Freq_Duty(float_t freq, float_t duty, GPTIMER_Regs * Timer, DL_TIMER_CC_INDEX Channel) {
-    if (duty > 1.0f) duty = 1.0f;
-    else if (duty < 0.0f) duty = 0.0f;
-    uint32_t final_duty_val;
-    uint32_t final_freq_val;
-    final_freq_val = CPUCLK_FREQ / freq;                // 频率换算
-    DL_TimerG_setLoadValue(Timer, final_freq_val);      // 设置频率
-    final_duty_val = final_freq_val * (1.0f - duty);    // 占空比换算
-    DL_TimerG_setCaptureCompareValue(Timer, final_duty_val, Channel);   // 设置占空比
+void PWM_Init(void)
+{
+    
 }
 //设置频率
 void PWM_SetFre(GPTIMER_Regs *gpt, DL_TIMER_CC_INDEX ccIndex, uint32_t frequency_hz)
@@ -24,6 +17,8 @@ void PWM_SetFre(GPTIMER_Regs *gpt, DL_TIMER_CC_INDEX ccIndex, uint32_t frequency
         return;
     }
     
+    uint32_t duty = PWM_GetDuty(gpt, ccIndex);
+
     // 防止频率过高
     if (frequency_hz > CPUCLK_FREQ) {
         frequency_hz = CPUCLK_FREQ;
@@ -81,7 +76,9 @@ void PWM_SetFre(GPTIMER_Regs *gpt, DL_TIMER_CC_INDEX ccIndex, uint32_t frequency
     DL_Timer_setClockConfig(gpt, (DL_TimerA_ClockConfig *)&ClockConfig);
     
     // 初始化PWM模式
-    DL_TimerA_initPWMMode(gpt, (DL_TimerA_PWMConfig *)&PWMConfig);
+    DL_Timer_initFourCCPWMMode(gpt, (DL_TimerA_PWMConfig *)&PWMConfig);
+
+    PWM_SetDuty(gpt, ccIndex, duty);
 }
 
 //设置占空比
@@ -126,13 +123,22 @@ void PWM_SetDuty(GPTIMER_Regs *gpt, DL_TIMER_CC_INDEX ccIndex, uint32_t duty_per
 //获取当前频率
 uint32_t PWM_GetFre(GPTIMER_Regs *gpt, DL_TIMER_CC_INDEX ccIndex)
 {
+    if (gpt == NULL) return 0;
+    
+    // 获取定时器配置参数
     uint32_t load = DL_Timer_getLoadValue(gpt);
-    uint32_t cmpx = DL_Timer_getCaptureCompareValue(gpt, ccIndex);
-
-    if (cmpx == 0 || load == 0) return 0;
-
-    // 计算频率
-    return (load + 1) / (cmpx + 1);
+    // uint32_t prescale = DL_Timer_getPrescaler(gpt);
+    static DL_Timer_ClockConfig clockConfig;
+    DL_Timer_getClockConfig(gpt, &clockConfig);
+    uint32_t prescale = clockConfig.prescale;
+    
+    if (load == 0) return 0;
+    
+    // 计算PWM频率
+    // 频率 = 基础时钟频率 / ((prescale + 1) * (load + 1))
+    uint32_t frequency = CPUCLK_FREQ / ((prescale + 1) * (load + 1));
+    
+    return frequency;
 }
 //获取当前占空比
 uint32_t PWM_GetDuty(GPTIMER_Regs *gpt, DL_TIMER_CC_INDEX ccIndex)
