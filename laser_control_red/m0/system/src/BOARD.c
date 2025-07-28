@@ -5,6 +5,8 @@
 #include "PWM.h"
 #include "STEPPER.h"
 
+volatile uint64_t Systick_Count = 0;    // 系统滴答计数,1ms累加
+
 JOYSTICK_HANDLE_T joystick_handle;
 OLED_Handle_t oled_handle;
 STEPPER_HANDLE_T stepper1_handle, stepper2_handle;
@@ -19,6 +21,7 @@ STEPPER_HANDLE_T stepper1_handle, stepper2_handle;
 void BOARD_Init(void)
 {
     SYSCFG_DL_init();
+    SysTick_Config(CPUCLK_FREQ / 1000);
     
     OLED_Config_t oled_config = OLED_DEFAULT_CONFIG(OLED_INST);
     OLED_Init(&oled_handle, &oled_config);
@@ -59,6 +62,11 @@ void BOARD_Init(void)
     STEPPER_Init(&stepper2_handle, &STEPPER_2_CONFIG);
     NVIC_EnableIRQ(STEPPER_2_INST_INT_IRQN);
    
+}
+
+void SysTick_Handler(void)
+{
+    Systick_Count++;
 }
 
 void ADC12_JOYSTICK_INST_IRQHandler(void)
