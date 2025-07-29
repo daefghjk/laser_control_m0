@@ -4,12 +4,16 @@
 #include "OLED.h"
 #include "PWM.h"
 #include "STEPPER.h"
+#include "BUTTON.h"
+#include "LASER.h"
 
 volatile uint64_t Systick_Count = 0;    // 系统滴答计数,1ms累加
 
 JOYSTICK_HANDLE_T joystick_handle;
 OLED_Handle_t oled_handle;
 STEPPER_HANDLE_T stepper1_handle, stepper2_handle;
+BTN_GROUP_HANDLE_T btn_group;
+LASER_HANDLE_T laser_handle;
 
 /*
 系统初始化BOARD_Init
@@ -62,6 +66,37 @@ void BOARD_Init(void)
     STEPPER_Init(&stepper2_handle, &STEPPER_2_CONFIG);
     NVIC_EnableIRQ(STEPPER_2_INST_INT_IRQN);
    
+    BTN_GROUP_CONFIG_T btn_group_config = {
+        .num_buttons = 6,                    // 使用6个按键
+        .support_mask = BTN_SUPPORT_ALL,     // 所有按键都支持全部功能
+        .long_time = 1000,                   // 长按1秒
+        .double_time = 300,                  // 双击间隔300ms
+        .buttons = {
+            // 配置按步进电机拓展板
+            [0] = {.port = GPIOB, .pin = DL_GPIO_PIN_0}, // 按键0配置
+            [1] = {.port = GPIOB, .pin = DL_GPIO_PIN_1}, // 按键1配置
+            [2] = {.port = GPIOB, .pin = DL_GPIO_PIN_2}, // 按键2配置
+            [3] = {.port = GPIOB, .pin = DL_GPIO_PIN_3}, // 按键3配置
+            [4] = {.port = GPIOB, .pin = DL_GPIO_PIN_6}, // 按键4配置
+            [5] = {.port = GPIOB, .pin = DL_GPIO_PIN_7}  // 按键5配置
+
+            // 配置按四驱小车拓展板
+            // [0] = {.port = GPIOA, .pin = DL_GPIO_PIN_13}, // 按键0配置
+            // [1] = {.port = GPIOA, .pin = DL_GPIO_PIN_14}, // 按键1配置
+            // [2] = {.port = GPIOA, .pin = DL_GPIO_PIN_23}, // 按键2配置
+            // [3] = {.port = GPIOA, .pin = DL_GPIO_PIN_25}, // 按键3配置
+            // [4] = {.port = GPIOA, .pin = DL_GPIO_PIN_27}, // 按键4配置
+            // [5] = {.port = GPIOA, .pin = DL_GPIO_PIN_31}  // 按键5配置
+        } 
+    }; 
+    BTN_Init(&btn_group, &btn_group_config);
+
+    // 激光笔配置
+    // LASER_CONFIG_T laser_config = {
+    //     .ctrl_port = GPIO_LASER_PORT,
+    //     .ctrl_pin = GPIO_LASER_PIN
+    // };
+    // LASER_Init(&laser_handle, &laser_config);
 }
 
 void SysTick_Handler(void)

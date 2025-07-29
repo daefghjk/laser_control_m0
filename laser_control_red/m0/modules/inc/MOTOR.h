@@ -1,6 +1,9 @@
 #ifndef __MOTOR_H__
 #define __MOTOR_H__
 
+#include "ti_msp_dl_config.h"
+#include "PWM.h"
+
 typedef enum {
     MOTOR_DIR_FORWARD,
     MOTOR_DIR_BACKWARD,

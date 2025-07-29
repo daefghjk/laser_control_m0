@@ -1,6 +1,9 @@
 #ifndef __STEPPER_H__
 #define __STEPPER_H__
 
+#include "ti_msp_dl_config.h"
+#include "PWM.h"
+
 // 定义配置结构体类型
 typedef struct {
     // 硬件资源

@@ -10,6 +10,8 @@ extern volatile uint64_t Systick_Count;
 extern JOYSTICK_HANDLE_T joystick_handle;
 extern OLED_Handle_t oled_handle;
 extern STEPPER_HANDLE_T stepper1_handle, stepper2_handle;
+extern BTN_GROUP_HANDLE_T btn_group;
+extern LASER_HANDLE_T laser_handle;
 
 void BOARD_Init(void);
 
