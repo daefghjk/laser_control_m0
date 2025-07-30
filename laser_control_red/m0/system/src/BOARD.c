@@ -1,11 +1,23 @@
 #include "ti_msp_dl_config.h"
+// 系统级别
 #include "BOARD.h"
-#include "JOYSTICK.h"
-#include "OLED.h"
+#include "DELAY.h"
 #include "PWM.h"
-#include "STEPPER.h"
+// 硬件层
+#include "OLED.h"
+#include "JOYSTICK.h"
 #include "BUTTON.h"
+#include "BEEP.h"
+#include "K230.h"
+// 硬件层（可能不单独使用）
+#include "ENCODER.h"
 #include "LASER.h"
+#include "GRAY.h"
+#include "MOTOR.h"
+#include "STEPPER.h"
+// 控制层
+#include "GIMBAL_CONTROL.h"
+#include "MOTOR_CONTROL.h"
 
 volatile uint64_t Systick_Count = 0;    // 系统滴答计数,1ms累加
 

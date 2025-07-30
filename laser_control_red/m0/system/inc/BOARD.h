@@ -1,9 +1,26 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#include "JOYSTICK.h"
+#include "ti_msp_dl_config.h"
+// 系统级别
+#include "BOARD.h"
+#include "DELAY.h"
+#include "PWM.h"
+// 硬件层
 #include "OLED.h"
+#include "JOYSTICK.h"
+#include "BUTTON.h"
+#include "BEEP.h"
+#include "K230.h"
+// 硬件层（可能不单独使用）
+#include "ENCODER.h"
+#include "LASER.h"
+#include "GRAY.h"
+#include "MOTOR.h"
 #include "STEPPER.h"
+// 控制层
+#include "GIMBAL_CONTROL.h"
+#include "MOTOR_CONTROL.h"
 
 extern volatile uint64_t Systick_Count;
 

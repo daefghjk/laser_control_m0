@@ -17,10 +17,11 @@ int main(void)
     PWM_SetDuty(STEPPER_1_INST, GPIO_STEPPER_1_C0_IDX, 50);
     // PWM_SetFre(STEPPER_1_INST, GPIO_STEPPER_1_C0_IDX, 10000);
     // PWM_Start(STEPPER_1_INST);
-    // OLED_ShowString(&oled_handle, 1, 1, "Hello, World!");
+    OLED_ShowString(&oled_handle, 1, 1, "Hello, Word!");
 
     while (1)
     {
+
         
     }
 }
